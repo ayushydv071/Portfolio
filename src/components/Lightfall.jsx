@@ -115,13 +115,7 @@ void mainImage(out vec4 o, vec2 C) {
   vec2 Y = vec2(5e-3, 6.28318530718 / angRings);
 
   vec2 c0 = sceneC(C, r);
-  vec2 cdx = sceneC(C + vec2(1.0, 0.0), r);
-  vec2 cdy = sceneC(C + vec2(0.0, 1.0), r);
-  vec2 dCx = cdx - c0;
-  vec2 dCy = cdy - c0;
-  dCx.y -= 6.28318530718 * floor(dCx.y / 6.28318530718 + 0.5);
-  dCy.y -= 6.28318530718 * floor(dCy.y / 6.28318530718 + 0.5);
-  vec2 fw = abs(dCx) + abs(dCy);
+  vec2 fw = vec2(2.0 / r.x, 0.002);
   C = c0;
 
   vec2 P = vec2(2.0, 1.0) * uv0 - (r / r.x) * vec2(0.0, 1.0);

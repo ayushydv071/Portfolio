@@ -4,16 +4,13 @@ import { motion } from 'framer-motion';
 import { personalInfo } from '../data/portfolioData';
 import Lightfall from './Lightfall';
 
-export default function Hero() {
+function TypewriterText({ words }) {
   const [wordIndex, setWordIndex] = useState(0);
   const [currentText, setCurrentText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
-  const [photoIndex, setPhotoIndex] = useState(0);
-
-  const photos = ['/profile1.jpg', '/profile2.jpg'];
 
   useEffect(() => {
-    const fullWord = personalInfo.heroWords[wordIndex];
+    const fullWord = words[wordIndex];
     const typingSpeed = isDeleting ? 40 : 80;
     const pauseDelay = isDeleting ? 0 : 2000;
 
@@ -22,7 +19,7 @@ export default function Hero() {
         setTimeout(() => setIsDeleting(true), pauseDelay);
       } else if (isDeleting && currentText === '') {
         setIsDeleting(false);
-        setWordIndex((prev) => (prev + 1) % personalInfo.heroWords.length);
+        setWordIndex((prev) => (prev + 1) % words.length);
       } else {
         const nextChar = isDeleting
           ? fullWord.substring(0, currentText.length - 1)
@@ -32,14 +29,27 @@ export default function Hero() {
     }, typingSpeed);
 
     return () => clearTimeout(timeout);
-  }, [currentText, isDeleting, wordIndex]);
+  }, [currentText, isDeleting, wordIndex, words]);
+
+  return (
+    <span className="inline-flex items-center bg-[#EC4899]/15 text-[#EC4899] px-3.5 py-0.5 rounded-2xl border border-[#EC4899]/30 font-extrabold text-[clamp(1.35rem,3.2vw,2.5rem)]">
+      {currentText}
+      <span className="animate-blink text-[#EC4899] font-mono ml-0.5">|</span>
+    </span>
+  );
+}
+
+export default function Hero() {
+  const [photoIndex, setPhotoIndex] = useState(0);
+
+  const photos = ['/profile1.jpg', '/profile2.jpg'];
 
   useEffect(() => {
     const photoInterval = setInterval(() => {
       setPhotoIndex((prev) => (prev + 1) % photos.length);
     }, 5000);
     return () => clearInterval(photoInterval);
-  }, []);
+  }, [photos.length]);
 
   return (
     <section id="home" className="relative py-20 lg:py-24 pt-32 lg:pt-40 overflow-hidden bg-[#1E1E1E]">
@@ -63,9 +73,9 @@ export default function Hero() {
         />
       </div>
 
-      {/* Background Ambient Glow Orbs */}
-      <div className="absolute top-1/4 left-10 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none animate-pulse-subtle z-0"></div>
-      <div className="absolute top-1/3 right-10 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl pointer-events-none animate-pulse-subtle z-0"></div>
+      {/* Background Ambient Glow Orbs (Radial Gradients - Zero Blur CPU/GPU Overhead) */}
+      <div className="absolute top-1/4 left-10 w-96 h-96 bg-[radial-gradient(circle,rgba(34,197,94,0.12)_0%,transparent_70%)] pointer-events-none z-0"></div>
+      <div className="absolute top-1/3 right-10 w-96 h-96 bg-[radial-gradient(circle,rgba(236,72,153,0.12)_0%,transparent_70%)] pointer-events-none z-0"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
@@ -95,10 +105,7 @@ export default function Hero() {
                 {/* Line 1: 'I am a [Animated Word]' - Locked together on line 1 without breaking */}
                 <span className="inline-flex items-center gap-2.5 max-w-full flex-wrap sm:flex-nowrap whitespace-nowrap">
                   <span>I am a</span>
-                  <span className="inline-flex items-center bg-[#EC4899]/15 text-[#EC4899] px-3.5 py-0.5 rounded-2xl border border-[#EC4899]/30 font-extrabold text-[clamp(1.35rem,3.2vw,2.5rem)]">
-                    {currentText}
-                    <span className="animate-blink text-[#EC4899] font-mono ml-0.5">|</span>
-                  </span>
+                  <TypewriterText words={personalInfo.heroWords} />
                 </span>
                 <br />
                 {/* Line 2: 'Developer.' */}
