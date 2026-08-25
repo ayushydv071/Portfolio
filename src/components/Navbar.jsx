@@ -17,22 +17,32 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      setScrolled(window.scrollY > 30);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const isScrolled = window.scrollY > 30;
+          setScrolled(prev => (prev !== isScrolled ? isScrolled : prev));
 
-      const sections = navLinks.map(link => link.href.substring(1));
-      const scrollPosition = window.scrollY + 200;
+          const sections = navLinks.map(link => link.href.substring(1));
+          const scrollPosition = window.scrollY + 200;
 
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const section = document.getElementById(sections[i]);
-        if (section && section.offsetTop <= scrollPosition) {
-          setActiveSection(sections[i]);
-          break;
-        }
+          for (let i = sections.length - 1; i >= 0; i--) {
+            const section = document.getElementById(sections[i]);
+            if (section && section.offsetTop <= scrollPosition) {
+              const currentSec = sections[i];
+              setActiveSection(prev => (prev !== currentSec ? currentSec : prev));
+              break;
+            }
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 

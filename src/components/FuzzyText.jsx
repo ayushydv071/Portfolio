@@ -204,7 +204,7 @@ const FuzzyText = ({
           currentIntensity = targetIntensity;
         }
 
-        const sliceHeight = 2;
+        const sliceHeight = 3;
         if (direction === 'horizontal') {
           for (let j = 0; j < tightHeight; j += sliceHeight) {
             const dx = Math.floor(currentIntensity * (Math.random() - 0.5) * fuzzRange);
