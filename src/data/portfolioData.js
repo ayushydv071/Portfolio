@@ -4,8 +4,8 @@ export const personalInfo = {
   role: "Full-Stack Developer",
   githubUsername: "ayushydv071",
   email: "ayushydv071@gmail.com",
-  phone: "+91 98765 43210", // Placeholder, editable by Ayush
-  location: "India",
+  phone: "+91 8218864907",
+  location: "Greater Noida, India",
   resumeUrl: "/resume.pdf",
   socials: {
     github: "https://github.com/ayushydv071",
